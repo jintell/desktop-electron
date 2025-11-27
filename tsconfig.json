@@ -1,0 +1,18 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "types": ["./types.d.ts"],
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowJs": true,
+    "checkJs": true,        // enables IntelliSense & inline checking in JS
+    "allowSyntheticDefaultImports": true
+  },
+//  "include": ["src"],
+  "exclude": ["src/electron"],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}

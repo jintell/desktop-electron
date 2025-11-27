@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext", // Tell TypeScript to generate ESNext syntax
+    "module": "NodeNext", // Tell TypeScript to require ESNext syntax as input (including .js files import/export)
+    "outDir": "../../dist-electron",
+    "skipLibCheck": true, // Skip type checking of all declaration files (*.d.ts) and dependencies.
+    // Add global types
+    "types": ["../../types.d.ts"]
+  }
+}
