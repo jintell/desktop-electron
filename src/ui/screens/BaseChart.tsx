@@ -8,21 +8,23 @@ import {
 
 type BaseChartProps = {
     data: { value: number | undefined }[];
+    fill: string;
+    stroke: string;
 }
 export const BaseChart = (props: BaseChartProps) => {
     return (
-        <ResponsiveContainer width={'100%'} height={'100%'}>
+        <ResponsiveContainer width={'100%'} height={'100%'} aspect={undefined}>
             <AreaChart data={props.data} >
                 <CartesianGrid stroke="#333" strokeDasharray={"5 5"} fill="#1C1C1C" />
                 <Area
                     fillOpacity={0.3}
-                    fill="#0A4D5A"
-                    stroke={'#5DD4EE'}
+                    fill={props.fill}
+                    stroke={props.stroke}
                     strokeWidth={3}
                     type="monotone"
                     dataKey="value"
                     isAnimationActive={false}/>
-                <XAxis stroke="transparent" height={0} />
+                <XAxis stroke="transparent" height={1} />
                 <YAxis domain={[0, 100]} stroke="transparent" width={0} />
             </AreaChart>
         </ResponsiveContainer>

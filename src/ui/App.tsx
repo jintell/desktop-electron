@@ -1,55 +1,102 @@
-import { useState, useEffect, useMemo } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useMemo, useEffect } from 'react'
 import './App.css'
 import { Charts } from './screens/Charts';
 import { useStatistics } from './hooks/useStatistics';
 
 function App() {
-  const [count, setCount] = useState(0);
+    const statistic = getStatistics();
+  const [activeView, setActiveView] = useState<string>('CPU');
   const usages = useStatistics(10);
   const cpuUsages = useMemo(()=> usages.map((usage) => usage.cpuUsage),
       [usages]);
+  const ramUsages = useMemo(()=> usages.map((usage) => usage.memoryUsage),
+        [usages]);
+  const storageUsages = useMemo(()=> usages.map((usage) => usage.storageUsage),
+        [usages]);
+
+  const activeViewUsages = useMemo(() => {
+      switch (activeView) {
+      case 'CPU': return cpuUsages;
+      case 'MEMORY': return ramUsages;
+      case 'STORAGE': return storageUsages;
+      default: return [];
+      }
+  }, [activeView, cpuUsages, ramUsages, storageUsages]);
 
     useEffect(() => {
-        const unsub = window.electron.subscribeToResources((data) => {
-            console.log(data);
-        });
-        return unsub;
+        return window.electron.subscribeChangeView((view) => setActiveView(view));
     }, []);
 
-  return (
+  // @ts-ignore
+    // @ts-ignore
+    return (
     <>
-        <div style={{ height: 120 }}>
-            <Charts data={cpuUsages} maxDataPoints={10}/>
+        <Header/>
+        <div className="main">
+            <div>
+                <SelectOption title="CPU"
+                              view="CPU"
+                              subTitle={statistic?.cpuModel ?? ""}
+                              data={cpuUsages}
+                              onclick={ () => setActiveView('CPU')}/>
+                <SelectOption title="MEMORY"
+                              view="MEMORY"
+                              subTitle={(statistic?.totalMemInGb.toString() ?? "") + 'GB'}
+                              data={ramUsages}
+                              onclick={ () => setActiveView('MEMORY')}/>
+                <SelectOption title="STORAGE"
+                              view="STORAGE"
+                              subTitle={(statistic?.totalStorage.toString() ?? "") + 'GB'}
+                              data={storageUsages}
+                              onclick={ () => setActiveView('STORAGE')}/>
+            </div>
+            <div className="mainGrid">
+                <Charts
+                    data={activeViewUsages}
+                    maxDataPoints={10}
+                    // @ts-ignore
+                    selectedView={activeView} />
+            </div>
         </div>
-        {/*<div style={{ height: 120 }}>*/}
-        {/*    <BaseChart*/}
-        {/*        data={[{value: 25}, {value: 30}, {value: 100}]}>*/}
-        {/*    </BaseChart>*/}
-        {/*</div>*/}
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
+}
+
+function SelectOption({title, view, subTitle, data, onclick}: {title: string, view: View, subTitle: string, data: number[], onclick: () => void}) {
+    return <button className="selectOption" onClick={onclick}>
+                <div className="selectOptionTitle">
+                    <div>{title}</div>
+                    <div>{subTitle}</div>
+                </div>
+                <div className="selectOptionChart">
+                    <Charts
+                        data={data}
+                        maxDataPoints={10}
+                        selectedView={view}/>
+                </div>
+            </button>
+}
+
+function Header() {
+    return (
+        <header>
+            <button id="close" onClick={() => window.electron.sendFrameAction('CLOSE')}/>
+            <button id="minimize" onClick={() => window.electron.sendFrameAction('MINIMIZE')}/>
+            <button id="maximize" onClick={() => window.electron.sendFrameAction('MAXIMIZE')}/>
+        </header>
+    );
+}
+
+function getStatistics() {
+    const [statistic, setStatistic] = useState<StatisticData>();
+
+    useEffect(() => {
+        (async ()=> {
+            setStatistic(await window.electron.getStatisticalData());
+        })();
+    }, []);
+
+    return statistic;
 }
 
 export default App

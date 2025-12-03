@@ -1,42 +1,81 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+header {
+    width: 100%;
+    text-align: left;
+    padding: 0.5em;
+    box-sizing: border-box;
+    background-color: #181818;
+    -webkit-app-region: drag;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+header button{
+    all: unset;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    margin: 0.25rem;
+    -webkit-app-region: no-drag;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#close {
+    background-color: #ff5555;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+#minimize {
+    background-color: #ffff55;
 }
 
-.card {
-  padding: 2em;
+#maximize {
+    background-color: #55ff55;
 }
 
-.read-the-docs {
-  color: #888;
+.mainGrid {
+    height: 10rem;
+    padding: 0.5rem;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 16rem auto;
+    gap: 1rem;
+    align-items: center;
+    margin: 1rem auto;
+    max-width: 900px;
+}
+
+.selectOption {
+    padding: 0.5rem;
+    display: block;
+    width: 100%;
+    gap: 1rem;
+    background-color: #2C2C2C;
+    margin: 0.5rem 0;
+    border-right: 0.25rem solid #181818;
+    cursor: pointer;
+}
+
+.selectOption:hover {
+    background-color: #3C3C3C;
+}
+
+.selectOption :first-child {
+    font-weight: 600;
+}
+
+.selectOption :nth-child(2) {
+    font-weight: 400;
+    font-size: 0.8rem;
+}
+
+.selectOptionChart {
+    width: 100%;
+    height: 2rem;
+}
+
+.selectOptionChart * {
+    cursor: pointer;
+}
+
+.selectOptionTitle {
+    display: flex;
+    gap: 1rem;
 }

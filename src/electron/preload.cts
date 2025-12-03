@@ -1,21 +1,17 @@
-import electron from 'electron';
+const electron = require('electron');
 
 electron.contextBridge.exposeInMainWorld('electron', {
-    subscribeToResources: (callback: (statistic: any) => (void)) =>
-        ipcOn('resourceUsage', (data: any) => {
-            callback(data);
-        }),
-    getStatisticalData: () => ipcInvoke('statisticalData'),
+        subscribeToResources: (callback) =>
+            ipcOn('resourceUsage', (data: any) => {
+                callback(data);
+            }),
+        getStatisticalData: () => ipcInvoke('statisticalData'),
+        subscribeChangeView: (callback) =>
+            ipcOn('changeView', (data: View) => {
+                callback(data);
+            }),
+        sendFrameAction: (payload) => ipcSend("sendFrameAction", payload),
 } satisfies Window['electron']);
-
-// electron.contextBridge.exposeInMainWorld('electron', {
-//     subscribeToResources: (callback: (statistic: any) => (void)) => {
-//         electron.ipcRenderer.on('statistic', (_:any, data: any) => {
-//             callback(data);
-//         });
-//     },
-//     getStatisticalData: () => electron.ipcRenderer.invoke('getStatisticalData'),
-// } satisfies Window['electron']);
 
 function ipcInvoke<Key extends keyof EventPayloadMapping>(
     key: Key
@@ -30,4 +26,11 @@ function ipcOn<Key extends keyof EventPayloadMapping>(
     const cb = (_: Electron.IpcRendererEvent, payload: any) => callback(payload);
      electron.ipcRenderer.on(key, cb);
     return () => electron.ipcRenderer.off(key, cb);
+}
+
+function ipcSend<Key extends keyof EventPayloadMapping>(
+    key: Key,
+    payload: EventPayloadMapping[Key]
+){
+    electron.ipcRenderer.send(key, payload);
 }

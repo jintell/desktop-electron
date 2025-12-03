@@ -1,8 +1,8 @@
 {
-  "appId": "bom.meld-tech.demo",
+  "appId": "com.meld-tech.demo",
   "files": ["dist-electron/**/*", "dist-react/**/*"],
-  "extraResources": "/dist-electron/preload.cjs",
-  "icon": "./public/favicon.ico",
+  "extraResources": ["/dist-electron/preload.cjs", "src/assets/**"],
+  "icon": "./src/assets/monitor.png",
   "mac": {
     "target": "dmg"
   },

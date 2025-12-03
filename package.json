@@ -1,5 +1,5 @@
 {
-  "name": "desktop-app-demo",
+  "name": "desktop-resource-monitor-app-demo",
   "private": true,
   "version": "0.0.0",
   "author": "Rel1cx",
@@ -13,9 +13,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "transpileElectron": "tsc -p src/electron/tsconfig.json",
-    "dist:mac": "npm run transpileElectron && npm run build && electron-builder --mac --arm64",
+    "dist:mac": "npm run transpileElectron && npm run build && electron-builder --mac --arm64 --universal",
     "dist:linux": "npm run transpileElectron && npm run build && electron-builder --linux --x64",
-    "dist:win": "npm run transpileElectron && npm run build && electron-builder --win --x64"
+    "dist:win": "npm run transpileElectron && npm run build && electron-builder  --win --x64",
+    "test:e2e": "playwright test --project=chromium",
+    "test:unit": "vitest src"
   },
   "dependencies": {
     "os-utils": "^0.0.14",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.57.0",
     "@types/node": "^24.10.1",
     "@types/os-utils": "^0.0.4",
     "@types/react": "^19.2.5",
@@ -41,7 +44,8 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "npm:rolldown-vite@7.2.5",
-    "vite-plugin-electron-builder": "^0.1.0"
+    "vite-plugin-electron-builder": "^0.1.0",
+    "vitest": "^4.0.14"
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.2.5"

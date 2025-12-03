@@ -235,4 +235,17 @@ Then add and modify the following to the package.json Scripts:
   }
 }
 ```
+## Run e2e using playwright
+in the root directory run:
+```bash
+npm init playwright
+```
+Then install the playwright using npx:
+```bash
+npx playwright install chromium
+```
 
+For Unit test use vitest.
+```bash
+npm install vitest --save-dev
+```
